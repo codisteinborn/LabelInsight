@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header/Header.js'
+import Modal from './components/Modal/Modal.js'
 
 class App extends Component {
   constructor(props) {
@@ -8,7 +9,9 @@ class App extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: []
+      modal: false,
+      items: [],
+      currentItem : []
     };
   }
 
@@ -16,37 +19,38 @@ class App extends Component {
     fetch("https://jsonplaceholder.typicode.com/photos")
       .then(res => res.json())
       .then(
-        (result) => {
-          this.setState({
-            isLoaded: true,
-            items: result.slice(0,25)
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          items: result.slice(0, 25)
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
       )
   }
 
-  onThumbnailClick (){
-
+  onThumbnailSelect = id => {
+    var imgSelect = this.state.items.filter(e => e.id === id);
+    this.setState({modal : true , currentItem : imgSelect});
   }
 
+  onThumbnailDeselect = () => {
+    this.setState({modal : false , currentItem : []});
+  }
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+    this.setState({
+        [name]: value
+    });
+}
+
   render() {
-    // return (
-    //   <div className="App">
-    //     <header className="App-header">
-    //       <img src={logo} className="App-logo" alt="logo" />
-    //       <h1 className="App-title">Welcome to React</h1>
-    //     </header>
-    //     <p className="App-intro">
-    //       To get started, edit <code>src/App.js</code> and save to reload.
-    //     </p>
-    //   </div>
-    // );
     const { error, isLoaded, items } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
@@ -56,13 +60,19 @@ class App extends Component {
     }
     else {
       return (
-        // <ul>
+        !this.state.modal ?
         <div>
-          {items.map(item => (
-            <img key={item.id} src={item.thumbnailUrl} alt={item.id}/>
-          ))}
+          <Header />
+          {/* <Thumbnails /> */}
+          <div>
+            {items.map(item => (
+              <div id={item.id}>
+              <img key={item.id}  src={item.thumbnailUrl} alt={item.title} onClick={() => this.onThumbnailSelect()} />
+              </div>
+            ))}
           </div>
-        // </ul>
+        </div> :
+        <Modal current={this.currentItem} deselect={this.onThumbnailDeselect} />
       );
     }
   }
