@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './components/Header/Header.js'
 import Modal from './components/Modal/Modal.js'
+import Thumbnails from './components/Thumbnails/Thumbnails.js'
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +23,8 @@ class App extends Component {
       (result) => {
         this.setState({
           isLoaded: true,
-          items: result.slice(0, 25)
+          items: result.slice(0, 25),
+          currentItem : [result[0]]
         });
       },
       (error) => {
@@ -63,16 +65,14 @@ class App extends Component {
         !this.state.modal ?
         <div>
           <Header />
-          {/* <Thumbnails /> */}
-          <div>
-            {items.map(item => (
-              <div id={item.id}>
-              <img key={item.id}  src={item.thumbnailUrl} alt={item.title} onClick={() => this.onThumbnailSelect()} />
-              </div>
-            ))}
+          <div className='thumbs'>
+            {items.map(elem => <Thumbnails id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} selector={this.onThumbnailSelect}/>)}
           </div>
-        </div> :
-        <Modal current={this.currentItem} deselect={this.onThumbnailDeselect} />
+        </div> 
+        :
+        <div>
+          {this.state.currentItem.map(elem => <Modal id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} deselector={this.onThumbnailDeselect} onChange={this.handleInputChange}/>)} 
+        </div>
       );
     }
   }

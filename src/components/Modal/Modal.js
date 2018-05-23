@@ -3,9 +3,11 @@ import './Modal.css'
 
 const Modal = props => (
     <div className="modal">
-    Current Item
-    <img src={props.current.url} alt={props.current.title}/>
-    <button onClick={props.deselect}>Back to Home </button>
+      <img src={props.url} alt='currentItem'/>
+      <form>
+        <input type="text" placeholder='Add Caption Here' onChange={this.onChange}/>
+      </form>
+      <button onClick={() => props.deselector()}>Back to Home </button>
     </div>
   );
   
