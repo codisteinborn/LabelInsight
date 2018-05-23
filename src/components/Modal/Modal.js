@@ -2,12 +2,13 @@ import React from 'react';
 import './Modal.css'
 
 const Modal = props => (
-    <div className="modal">
+    <div id="modal">
       <img src={props.url} alt='currentItem'/>
+      <div id='title'>{props.title}</div>
       <form>
-        <input type="text" placeholder='Add Caption Here' onChange={this.onChange}/>
+        <input id='description' name='description' type="text" value={props.description} onChange={props.onChange}/>
       </form>
-      <button onClick={() => props.deselector()}>Back to Home </button>
+      <button onClick={() => props.deselector()}>Back to All Thumbnails</button>
     </div>
   );
   
