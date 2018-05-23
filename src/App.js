@@ -12,7 +12,8 @@ class App extends Component {
       isLoaded: false,
       modal: false,
       items: [],
-      currentItem : []
+      currentItem : [],
+      description : ''
     };
   }
 
@@ -24,7 +25,8 @@ class App extends Component {
         this.setState({
           isLoaded: true,
           items: result.slice(0, 25),
-          currentItem : [result[0]]
+          currentItem : [result[0]],
+          description : localStorage.getItem('description')
         });
       },
       (error) => {
@@ -42,7 +44,7 @@ class App extends Component {
   }
 
   onThumbnailDeselect = () => {
-    this.setState({modal : false , currentItem : []});
+    this.setState({modal : false});
   }
 
   handleInputChange = (e) => {
@@ -50,6 +52,7 @@ class App extends Component {
     this.setState({
         [name]: value
     });
+    localStorage.setItem('description', this.state.description);
 }
 
   render() {
@@ -71,7 +74,7 @@ class App extends Component {
         </div> 
         :
         <div>
-          {this.state.currentItem.map(elem => <Modal id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} deselector={this.onThumbnailDeselect} onChange={this.handleInputChange}/>)} 
+          {this.state.currentItem.map(elem => <Modal id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} deselector={this.onThumbnailDeselect} onChange={this.handleInputChange} description={this.state.description}/>)} 
         </div>
       );
     }

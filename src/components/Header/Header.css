@@ -1,8 +1,12 @@
-.head{
+#head{
     height: 150px;
     text-align: center;
     color: White;
     background-color: black;
-    font-size: 25px;
+    font-size: 40px;
     border: 5px solid black;
+}
+#instructions{
+    font-size: 20px;
+    margin-top: 15px;
 }
