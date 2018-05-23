@@ -12,8 +12,8 @@ class App extends Component {
       isLoaded: false,
       modal: false,
       items: [],
-      currentItem : [],
-      description : ''
+      currentItem: [],
+      description: ''
     };
   }
 
@@ -25,8 +25,7 @@ class App extends Component {
         this.setState({
           isLoaded: true,
           items: result.slice(0, 25),
-          currentItem : [result[0]],
-          description : localStorage.getItem('description')
+          currentItem: [result[0]]
         });
       },
       (error) => {
@@ -40,20 +39,19 @@ class App extends Component {
 
   onThumbnailSelect = id => {
     var imgSelect = this.state.items.filter(e => e.id === id);
-    this.setState({modal : true , currentItem : imgSelect});
+    this.setState({ modal: true, currentItem: imgSelect, description: localStorage.getItem(id) });
   }
 
   onThumbnailDeselect = () => {
-    this.setState({modal : false});
+    this.setState({ modal: false, description: '' });
   }
 
   handleInputChange = (e) => {
     const { name, value } = e.target;
     this.setState({
-        [name]: value
+      [name]: value,
     });
-    localStorage.setItem('description', this.state.description);
-}
+  }
 
   render() {
     const { error, isLoaded, items } = this.state;
@@ -66,16 +64,16 @@ class App extends Component {
     else {
       return (
         !this.state.modal ?
-        <div>
-          <Header />
-          <div className='thumbs'>
-            {items.map(elem => <Thumbnails id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} selector={this.onThumbnailSelect}/>)}
+          <div>
+            <Header />
+            <div className='thumbs'>
+              {items.map(elem => <Thumbnails id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} selector={this.onThumbnailSelect} />)}
+            </div>
           </div>
-        </div> 
-        :
-        <div>
-          {this.state.currentItem.map(elem => <Modal id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} deselector={this.onThumbnailDeselect} onChange={this.handleInputChange} description={this.state.description}/>)} 
-        </div>
+          :
+          <div>
+            {this.state.currentItem.map(elem => <Modal id={elem.id} title={elem.title} url={elem.url} key={elem.id} thumbnailurl={elem.thumbnailUrl} deselector={this.onThumbnailDeselect} onChange={this.handleInputChange} description={this.state.description} />)}
+          </div>
       );
     }
   }
